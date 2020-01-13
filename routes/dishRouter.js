@@ -13,6 +13,7 @@ dishRouter.route('/')
         Dishes.find({})
             .then((dishes) => {
                 res.statusCode = 200;
+                console.log("Helloooo")
                 res.setHeader('Content-Type', 'application/json');
                 res.json(dishes);
             }, (err) => next(err))
