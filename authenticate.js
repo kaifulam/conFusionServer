@@ -37,3 +37,14 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts,
     }));
 
 exports.verifyUser = passport.authenticate('jwt', { session: false });
+
+// in this function, req.user is either exist or it doesn't
+exports.verifyAdmin = ((req, res, next) => {
+    if (req.user.admin) {
+        next();
+    }
+    else {
+        console.log("statusCode: 403", "You are not authorized to perform this operation!");
+        return next(new Error("statusCode: 403", "You are not authorized to perform this operation!"));
+    }
+})
