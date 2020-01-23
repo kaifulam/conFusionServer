@@ -157,7 +157,7 @@ dishRouter.route('/:dishId/comments/:commentId')
                 if (dish != null && dish.comments.id(req.params.commentId) != null) {
                     var commentAuthor = dish.comments.id(req.params.commentId).author.id;
                     console.log("commentAuthor:: " + commentAuthor);
-                    console.log("req.user:: " + req.user.id);
+                    console.log("req.user:: " + req.body);
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');
                     res.json(dish.comments.id(req.params.commentId));

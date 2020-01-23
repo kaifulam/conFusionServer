@@ -45,6 +45,7 @@ exports.verifyAdmin = ((req, res, next) => {
     }
     else {
         console.log("statusCode: 403", "You are not authorized to perform this operation!");
-        return next(new Error("statusCode: 403", "You are not authorized to perform this operation!"));
+        res.statusCode = 403;
+        return next(new Error("Error 403. You are not authorized to perform this operation!"));
     }
 })
