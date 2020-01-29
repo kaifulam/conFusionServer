@@ -155,14 +155,17 @@ dishRouter.route('/:dishId/comments')
 
 dishRouter.route('/:dishId/comments/:commentId')
     .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
-    .get(cors.cors, (req, res, next) => {
+    .get(cors.cors, (req, res, next) => {   // need to put in authenticate.verifyUser to get req.user
         Dishes.findById(req.params.dishId)
             .populate('comments.author')
             .then((dish) => {
                 if (dish != null && dish.comments.id(req.params.commentId) != null) {
                     var commentAuthor = dish.comments.id(req.params.commentId).author.id;
                     console.log("commentAuthor:: " + commentAuthor);
-                    console.log("req.user:: " + req.body);
+                    console.log("req.user:: " + req.user);
+                    console.log("req.user.username:: " + req.user.username);
+                    console.log("req.user.id:: " + req.user.id);
+                    //console.log("compare:: " + req.user.id.equals(commentAuthor));
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');
                     res.json(dish.comments.id(req.params.commentId));
@@ -189,10 +192,16 @@ dishRouter.route('/:dishId/comments/:commentId')
         Dishes.findById(req.params.dishId)
             .then((dish) => {
                 if (dish != null && dish.comments.id(req.params.commentId) != null) {
-                    var commentAuthor = dish.comments.id(req.params.commentId).author.id;
+                    //var commentAuthor = dish.comments.id(req.params.commentId).author._id.toString(); also works comparing strings...
+                    var commentAuthor = dish.comments.id(req.params.commentId).author._id;
                     console.log("commentAuthor:: " + commentAuthor);
-                    console.log("req.user.id:: " + req.user.id);
-                    if (req.user.id.equals(commentAuthor)) {
+                    console.log("type:: " + typeof (commentAuthor));
+                    console.log("req.user.id:: " + req.user._id);
+                    console.log("type:: " + typeof (req.user._id));
+
+                    // if(req.user.id == commentAuthor).. this also works using the commenting above
+
+                    if (req.user._id.equals(commentAuthor)) {
                         if (req.body.rating) {
                             dish.comments.id(req.params.commentId).rating = req.body.rating;
                         }
